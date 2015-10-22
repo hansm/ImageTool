@@ -172,20 +172,23 @@ ImageTool.prototype = {
 	},
 
 	fitImage: function(width, height) {
+		var originalWidth = width;
 		var maxWidth = this.getWidth();
 		var maxHeight = this.getHeight();
 		this.sizeRatio = 1;
 
+		var ratio;
 		if (width > maxWidth) {
-			this.sizeRatio = width / maxWidth;
+			ratio = width / maxWidth;
 			width = maxWidth;
-			height = Math.round(height / this.sizeRatio);
+			height = Math.round(height / ratio);
 		}
 		if (height > maxHeight) {
-			this.sizeRatio = height / maxHeight;
+			ratio = height / maxHeight;
 			height = maxHeight;
-			width = Math.round(width / this.sizeRatio);
+			width = Math.round(width / ratio);
 		}
+		this.sizeRatio = originalWidth / width;
 
 		this.elPreview.children("img")
 			.width(width)
