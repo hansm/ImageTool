@@ -150,11 +150,11 @@ ImageTool.prototype = {
 			image.onload = function() {
 				$this.cropCor = {};
 
-				$this.elPreview.show().empty();
-				$this.elPreview.append(image);
-
 				$this.imageWidth = image.width;
 				$this.imageHeight = image.height;
+
+				$this.elPreview.show().empty();
+				$this.elPreview.append(image);
 
 				$this.fitImage($this.imageWidth, $this.imageHeight);
 
