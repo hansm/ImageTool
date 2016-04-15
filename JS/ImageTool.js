@@ -33,6 +33,7 @@ var ImageTool = function(fieldId, backendUrl, uploadDone) {
 	this.imageHeight = 0;
 	this.sizeRatio = 1;
 	this.cropCor = {};
+	this.draggedFile = null;
 };
 
 ImageTool.ALLOWED_TYPES = ["image/jpeg", "image/png"];
@@ -52,9 +53,29 @@ ImageTool.prototype = {
 
 		this.elFile.find("input").change(function(e) {
 			e.preventDefault();
+			$this.draggedFile = null;
 
 			if (this.files && this.files.length > 0) {
 				$this.preview(this.files[0]);
+			}
+		});
+
+		this.elForm.on("dragover", function(e) {
+			e.preventDefault();
+			$this.elForm.addClass("dragOver");
+		});
+		this.elForm.on("dragleave", function(e) {
+			e.preventDefault();
+			$this.elForm.removeClass("dragOver");
+		});
+		this.elForm.on("drop", function(e) {
+			e.preventDefault();
+			$this.elForm.removeClass("dragOver");
+			if (e.originalEvent.dataTransfer
+					&& e.originalEvent.dataTransfer.files
+					&& e.originalEvent.dataTransfer.files.length > 0) {
+				$this.draggedFile = e.originalEvent.dataTransfer.files[0];
+				$this.preview(e.originalEvent.dataTransfer.files[0]);
 			}
 		});
 
@@ -84,7 +105,7 @@ ImageTool.prototype = {
 			} else {
 				$this.resizeCancel();
 			}
-		})
+		});
 
 		// Crop
 		this.elCropAction.find("button").click(function(e) {
@@ -332,6 +353,9 @@ ImageTool.prototype = {
 
 		this.showUploading();
 		var formData = new FormData(this.elForm.get(0));
+		if (this.draggedFile) {
+			formData.append("image", this.draggedFile);
+		}
 
 		if (this.cropCor
 				&& this.cropCor.x1

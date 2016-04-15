@@ -5,6 +5,11 @@
 	width:  640px;
 	height: 480px;
 	position: relative;
+	box-sizing: border-box;
+}
+.ImageToolBox.dragOver {
+	border-color: #01DF01;
+	background-color: #F2FBEF;
 }
 .ImageToolBox .message {
 	display: none;
